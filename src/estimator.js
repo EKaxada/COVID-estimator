@@ -23,7 +23,8 @@ const covid19ImpactEstimator = (data) => {
   severeImpact.currentlyInfected = data.reportedCases * 50;
 
   // estimation of number of infections in a given period
-  let factor, days;
+  let factor;
+  let days;
 
   if (data.periodType === 'days') {
     factor = Math.floor(data.timeToElapse / 3);
