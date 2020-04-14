@@ -1,4 +1,4 @@
-const data = {
+const input = {
   region: {
     name: 'Africa',
     avgAge: 19.7,
@@ -23,7 +23,7 @@ const covid19ImpactEstimator = (data) => {
   severeImpact.currentlyInfected = data.reportedCases * 50;
 
   // estimation of number of infections in a given period
-  var factor, days;
+  let factor, days;
 
   if (data.periodType === 'days') {
     factor = Math.floor(data.timeToElapse / 3);
@@ -36,8 +36,8 @@ const covid19ImpactEstimator = (data) => {
     factor = Math.floor(days / 3);
   }
 
-  impact.infectionsByRequestedTime = impact.currentlyInfected * Math.pow(2, factor);
-  severeImpact.infectionsByRequestedTime = severeImpact.currentlyInfected * Math.pow(2, factor);
+  impact.infectionsByRequestedTime = impact.currentlyInfected * (2 ** factor);
+  severeImpact.infectionsByRequestedTime = severeImpact.currentlyInfected * (2 ** factor);
 
   // CHALLENGE TWO
   // determine the number of severe cases
@@ -59,12 +59,12 @@ const covid19ImpactEstimator = (data) => {
   severeImpact.casesForVentilatorsByRequestedTime = 0.02 * severeImpact.infectionsByRequestedTime;
 
   // impact on the economy
-  impact.dollarsInFlight = (impact.infectionsByRequestedTime * data.region.avgDailyIncomePopulation * data.region.avgDailyIncomeInUSD * days).toFixed(2);
-  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * data.region.avgDailyIncomePopulation * data.region.avgDailyIncomeInUSD * days).toFixed(2);
+  impact.dollarsInFlight = Math.trunc(impact.infectionsByRequestedTime * data.region.avgDailyIncomePopulation * data.region.avgDailyIncomeInUSD * days);
+  severeImpact.dollarsInFlight = Math.trunc(severeImpact.infectionsByRequestedTime * data.region.avgDailyIncomePopulation * data.region.avgDailyIncomeInUSD * days);
 
   return { data, impact, severeImpact };
 };
 
-covid19ImpactEstimator(data);
+covid19ImpactEstimator(input);
 
 export default covid19ImpactEstimator;
